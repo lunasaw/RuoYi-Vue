@@ -1,6 +1,8 @@
-package com.luna.generator.service;
+package com.luna.generator.service.impl;
 
 import java.util.List;
+
+import com.luna.generator.service.IGenTableColumnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.luna.common.core.text.Convert;
@@ -13,7 +15,7 @@ import com.luna.generator.mapper.GenTableColumnMapper;
  * @author luna
  */
 @Service
-public class GenTableColumnServiceImpl implements IGenTableColumnService 
+public class GenTableColumnServiceImpl implements IGenTableColumnService
 {
 	@Autowired
 	private GenTableColumnMapper genTableColumnMapper;
