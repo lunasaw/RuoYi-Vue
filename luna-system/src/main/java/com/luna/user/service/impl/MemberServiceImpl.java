@@ -2,7 +2,10 @@ package com.luna.user.service.impl;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.luna.common.utils.DateUtils;
+import com.luna.user.domain.MemberExtra;
+import com.luna.user.mapper.MemberExtraMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.luna.user.mapper.MemberMapper;
@@ -16,8 +19,7 @@ import com.luna.user.service.IMemberService;
  * @date 2022-04-29
  */
 @Service
-public class MemberServiceImpl implements IMemberService
-{
+public class MemberServiceImpl  implements IMemberService {
     @Autowired
     private MemberMapper memberMapper;
 
@@ -28,8 +30,7 @@ public class MemberServiceImpl implements IMemberService
      * @return 会员管理
      */
     @Override
-    public MemberDO selectMemberByUserId(Long userId)
-    {
+    public MemberDO selectMemberByUserId(Long userId) {
         return memberMapper.selectMemberByUserId(userId);
     }
 
@@ -40,8 +41,7 @@ public class MemberServiceImpl implements IMemberService
      * @return 会员管理
      */
     @Override
-    public List<MemberDO> selectMemberDOList(MemberDO memberDO)
-    {
+    public List<MemberDO> selectMemberDOList(MemberDO memberDO) {
         return memberMapper.selectMemberDOList(memberDO);
     }
 
@@ -52,8 +52,7 @@ public class MemberServiceImpl implements IMemberService
      * @return 结果
      */
     @Override
-    public int insertMemberDO(MemberDO memberDO)
-    {
+    public int insertMemberDO(MemberDO memberDO) {
         memberDO.setCreateTime(DateUtils.getNowDate());
         return memberMapper.insertMemberDO(memberDO);
     }
@@ -65,8 +64,7 @@ public class MemberServiceImpl implements IMemberService
      * @return 结果
      */
     @Override
-    public int updateMemberDO(MemberDO memberDO)
-    {
+    public int updateMemberDO(MemberDO memberDO) {
         memberDO.setUpdateTime(DateUtils.getNowDate());
         return memberMapper.updateMemberDO(memberDO);
     }
@@ -78,8 +76,7 @@ public class MemberServiceImpl implements IMemberService
      * @return 结果
      */
     @Override
-    public int deleteMemberByUserIds(Long[] userIds)
-    {
+    public int deleteMemberByUserIds(Long[] userIds) {
         return memberMapper.deleteMemberByUserIds(userIds);
     }
 
@@ -90,8 +87,7 @@ public class MemberServiceImpl implements IMemberService
      * @return 结果
      */
     @Override
-    public int deleteMemberByUserId(Long userId)
-    {
+    public int deleteMemberByUserId(Long userId) {
         return memberMapper.deleteMemberByUserId(userId);
     }
 }

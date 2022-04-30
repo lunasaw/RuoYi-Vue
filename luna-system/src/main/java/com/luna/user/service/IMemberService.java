@@ -1,7 +1,12 @@
 package com.luna.user.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.luna.user.domain.MemberDO;
+import com.luna.user.domain.MemberExtra;
+import com.luna.user.mapper.MemberExtraMapper;
 
 /**
  * 会员管理Service接口
@@ -9,8 +14,7 @@ import com.luna.user.domain.MemberDO;
  * @author luna
  * @date 2022-04-29
  */
-public interface IMemberService
-{
+public interface IMemberService  {
     /**
      * 查询会员管理
      * 

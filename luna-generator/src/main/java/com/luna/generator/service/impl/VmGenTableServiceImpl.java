@@ -189,6 +189,23 @@ public class VmGenTableServiceImpl implements IVmGenTableService {
     }
 
     /**
+     * 批量生成代码（下载方式）
+     *
+     * @param tableNames 表数组
+     * @return 数据
+     */
+    @Override
+    public byte[] downloadCode(String[] tableNames, Integer vmId) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        for (String tableName : tableNames) {
+            generatorCode(tableName, vmId, zip);
+        }
+        IOUtils.closeQuietly(zip);
+        return outputStream.toByteArray();
+    }
+
+    /**
      * 获取代码生成地址
      * 
      * @param table 业务表信息

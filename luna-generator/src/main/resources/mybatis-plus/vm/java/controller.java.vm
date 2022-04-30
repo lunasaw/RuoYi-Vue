@@ -1,6 +1,5 @@
 package ${packageName}.controller;
 
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +26,7 @@ import com.luna.common.core.page.TableDataInfo;
 
 /**
  * ${functionName}Controller
- *
+ * 
  * @author ${author}
  * @date ${datetime}
  */
@@ -76,8 +75,9 @@ public class ${ClassName}Controller extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:query')")
     @GetMapping(value = "/{${pkColumn.javaField}}")
-    public AjaxResult getInfo(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField}) {
-        return AjaxResult.success(${className}Service.getById(${pkColumn.javaField}));
+    public AjaxResult getInfo(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField})
+    {
+        return AjaxResult.success(${className}Service.select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaField}));
     }
 
     /**
@@ -86,8 +86,9 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:add')")
     @Log(title = "${functionName}", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ${ClassName} ${className}) {
-        return toAjax(${className}Service.save(${className}));
+    public AjaxResult add(@RequestBody ${ClassName} ${className})
+    {
+        return toAjax(${className}Service.insert${ClassName}(${className}));
     }
 
     /**
@@ -96,8 +97,9 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
     @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ${ClassName} ${className}) {
-        return toAjax(${className}Service.updateById(${className}));
+    public AjaxResult edit(@RequestBody ${ClassName} ${className})
+    {
+        return toAjax(${className}Service.update${ClassName}(${className}));
     }
 
     /**
@@ -105,8 +107,9 @@ public class ${ClassName}Controller extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:remove')")
     @Log(title = "${functionName}", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{${pkColumn.javaField}s}")
-    public AjaxResult remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s) {
-        return toAjax(${className}Service.removeByIds(Arrays.asList(${pkColumn.javaField}s)));
+	@DeleteMapping("/{${pkColumn.javaField}s}")
+    public AjaxResult remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s)
+    {
+        return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaField}s));
     }
 }

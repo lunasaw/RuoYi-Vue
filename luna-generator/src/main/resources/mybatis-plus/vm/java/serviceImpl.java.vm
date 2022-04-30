@@ -1,9 +1,15 @@
 package ${packageName}.service.impl;
 
 import java.util.List;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+#foreach ($column in $columns)
+#if($column.javaField == 'createTime' || $column.javaField == 'updateTime')
+import com.luna.common.utils.DateUtils;
+#break
+#end
+#end
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 #if($table.sub)
 import java.util.ArrayList;
 import com.luna.common.utils.StringUtils;
@@ -16,109 +22,130 @@ import ${packageName}.service.I${ClassName}Service;
 
 /**
  * ${functionName}Service业务层处理
- *
+ * 
  * @author ${author}
  * @date ${datetime}
  */
 @Service
 public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${ClassName}> implements I${ClassName}Service
 {
+    @Autowired
+    private ${ClassName}Mapper ${className}Mapper;
 
-#if($table.tree)
+    /**
+     * 查询${functionName}
+     * 
+     * @param ${pkColumn.javaField} ${functionName}主键
+     * @return ${functionName}
+     */
     @Override
-    public boolean save(${ClassName} entity) {
-        ${ClassName} info = baseMapper.selectById(entity.getParentId());
-        // 如果父节点不为正常状态，则不允许新增子节点
-        if (info == null) {
-            throw new CustomException("${functionName}停用，不允许新增");
-        }
-        entity.setAncestors(info.getAncestors() + "," + entity.getParentId());
-        return super.save(entity);
+    public ${ClassName} select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaType} ${pkColumn.javaField})
+    {
+        return ${className}Mapper.select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaField});
     }
-#end
 
     /**
      * 查询${functionName}列表
-     *
-     *
+     * 
      * @param ${className} ${functionName}
      * @return ${functionName}
      */
     @Override
     public List<${ClassName}> select${ClassName}List(${ClassName} ${className})
     {
-        return baseMapper.select${ClassName}List(${className});
-    }
-
-#if($table.sub)
-    /**
-     * 查询${functionName}
-     *
-     * @param ${pkColumn.javaField} ${functionName}ID
-     * @return ${functionName}
-     */
-    public ${ClassName} getById(${pkColumn.javaType} ${pkColumn.javaField}){
-        ${ClassName} ${className} = super.getById(${pkColumn.javaField});
-        List<${subClassName}> ${subclassName}s = baseMapper.select${subClassName}By${subTableFkClassName}(${pkColumn.javaField});
-        ${className}.set${subClassName}List(${subclassName}s);
-        return ${className};
+        return ${className}Mapper.select${ClassName}List(${className});
     }
 
     /**
      * 新增${functionName}
-     *
+     * 
      * @param ${className} ${functionName}
      * @return 结果
      */
+#if($table.sub)
     @Transactional
+#end
     @Override
-    public boolean save(${ClassName} ${className}){
-        boolean result = super.save(${className});
+    public int insert${ClassName}(${ClassName} ${className})
+    {
+#foreach ($column in $columns)
+#if($column.javaField == 'createTime')
+        ${className}.setCreateTime(DateUtils.getNowDate());
+#end
+#end
+#if($table.sub)
+        int rows = ${className}Mapper.insert${ClassName}(${className});
         insert${subClassName}(${className});
-        return result;
+        return rows;
+#else
+        return ${className}Mapper.insert${ClassName}(${className});
+#end
     }
 
     /**
      * 修改${functionName}
-     *
+     * 
      * @param ${className} ${functionName}
      * @return 结果
      */
+#if($table.sub)
     @Transactional
+#end
     @Override
-    public boolean updateById(${ClassName} ${className}) {
-        baseMapper.delete${subClassName}By${subTableFkClassName}(${className}.get${pkColumn.capJavaField}());
+    public int update${ClassName}(${ClassName} ${className})
+    {
+#foreach ($column in $columns)
+#if($column.javaField == 'updateTime')
+        ${className}.setUpdateTime(DateUtils.getNowDate());
+#end
+#end
+#if($table.sub)
+        ${className}Mapper.delete${subClassName}By${subTableFkClassName}(${className}.get${pkColumn.capJavaField}());
         insert${subClassName}(${className});
-        return super.updateById(${className});
-    }
-
-    /**
-     * 删除${functionName}
-     *
-     * @param ${pkColumn.javaField} 需要删除的${functionName}ID
-     * @return 结果
-     */
-    @Transactional
-    public boolean removeById(${pkColumn.javaType} ${pkColumn.javaField}){
-        baseMapper.delete${subClassName}By${subTableFkClassName}(${pkColumn.javaField});
-        return super.removeById(${pkColumn.javaField});
+#end
+        return ${className}Mapper.update${ClassName}(${className});
     }
 
     /**
      * 批量删除${functionName}
-     *
-     * @param ${pkColumn.javaField}s 需要删除的${functionName}ID
+     * 
+     * @param ${pkColumn.javaField}s 需要删除的${functionName}主键
      * @return 结果
      */
+#if($table.sub)
     @Transactional
-    public boolean removeByIds(List<${pkColumn.javaType}> ${pkColumn.javaField}s){
-        baseMapper.delete${subClassName}By${subTableFkClassName}s(${pkColumn.javaField}s);
-        return super.removeByIds(${pkColumn.javaField}s);
+#end
+    @Override
+    public int delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaType}[] ${pkColumn.javaField}s)
+    {
+#if($table.sub)
+        ${className}Mapper.delete${subClassName}By${subTableFkClassName}s(${pkColumn.javaField}s);
+#end
+        return ${className}Mapper.delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaField}s);
     }
 
     /**
+     * 删除${functionName}信息
+     * 
+     * @param ${pkColumn.javaField} ${functionName}主键
+     * @return 结果
+     */
+#if($table.sub)
+    @Transactional
+#end
+    @Override
+    public int delete${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaType} ${pkColumn.javaField})
+    {
+#if($table.sub)
+        ${className}Mapper.delete${subClassName}By${subTableFkClassName}(${pkColumn.javaField});
+#end
+        return ${className}Mapper.delete${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaField});
+    }
+#if($table.sub)
+
+    /**
      * 新增${subTable.functionName}信息
-     *
+     * 
      * @param ${className} ${functionName}对象
      */
     public void insert${subClassName}(${ClassName} ${className})
@@ -135,7 +162,7 @@ public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${C
             }
             if (list.size() > 0)
             {
-                baseMapper.batch${subClassName}(list);
+                ${className}Mapper.batch${subClassName}(list);
             }
         }
     }

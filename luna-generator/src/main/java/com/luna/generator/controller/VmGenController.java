@@ -2,8 +2,10 @@ package com.luna.generator.controller;
 
 import com.luna.common.annotation.Log;
 import com.luna.common.core.domain.AjaxResult;
+import com.luna.common.core.text.Convert;
 import com.luna.common.enums.BusinessType;
 import com.luna.generator.domain.VmTypeEnum;
+import com.luna.generator.domain.VmTypeVO;
 import com.luna.generator.service.IVmGenTableService;
 import com.luna.generator.util.GenUtils;
 import org.apache.commons.io.IOUtils;
@@ -39,8 +41,8 @@ public class VmGenController {
     @PreAuthorize("@ss.hasPermi('tool:gen:preview')")
     @GetMapping("/vmTypes")
     public AjaxResult vmIds() {
-        Map<Integer, String> stringMap = Arrays.stream(VmTypeEnum.values()).collect(Collectors.toMap(VmTypeEnum::getType, VmTypeEnum::getDesc));
-        return AjaxResult.success(stringMap);
+        List<VmTypeVO> vmTypeVOList = Arrays.stream(VmTypeEnum.values()).map(e -> new VmTypeVO(e.getType(), e.getDesc())).collect(Collectors.toList());
+        return AjaxResult.success(vmTypeVOList);
     }
 
     /**
@@ -62,6 +64,18 @@ public class VmGenController {
     public void download(HttpServletResponse response, @PathVariable("tableName") String tableName, @PathVariable("vmId") Integer vmId)
         throws IOException {
         byte[] data = iVmGenTableService.downloadCode(tableName, vmId);
+        genCode(response, data);
+    }
+
+    /**
+     * 批量生成代码
+     */
+    @PreAuthorize("@ss.hasPermi('tool:gen:code')")
+    @Log(title = "代码生成", businessType = BusinessType.GENCODE)
+    @GetMapping("/batchGenCode/{vmId}")
+    public void batchGenCode(HttpServletResponse response, String tables, @PathVariable("vmId") Integer vmId) throws IOException {
+        String[] tableNames = Convert.toStrArray(tables);
+        byte[] data = iVmGenTableService.downloadCode(tableNames, vmId);
         genCode(response, data);
     }
 
