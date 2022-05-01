@@ -9,6 +9,16 @@ export function list${BusinessName}(query) {
   })
 }
 
+// 显式分页查询${functionName}列表
+export function ${businessName}PageList(query) {
+    return request({
+        url: '/${moduleName}/${businessName}/pageList',
+        method: 'get',
+        params: query
+    })
+}
+
+
 // 查询${functionName}详细
 export function get${BusinessName}(${pkColumn.javaField}) {
   return request({

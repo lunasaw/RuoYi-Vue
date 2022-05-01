@@ -2,6 +2,8 @@ package ${packageName}.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +58,17 @@ public class ${ClassName}Controller extends BaseController
         return AjaxResult.success(list);
     }
 #end
+
+    /**
+     * 分页查询${functionName}列表
+     */
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
+    @GetMapping("/pageList")
+    public TableDataInfo pageList(${ClassName} ${className}) {
+        Page<${ClassName}> page = startPageList();
+        IPage<${ClassName}> list = ${className}Service.selectList(page, ${className});
+        return getDataTable(list.getRecords());
+    }
 
     /**
      * 导出${functionName}列表

@@ -10,6 +10,7 @@ import com.luna.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 #if($table.sub)
 import java.util.ArrayList;
 import com.luna.common.utils.StringUtils;
@@ -55,6 +56,18 @@ public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${C
     {
         return ${className}Mapper.select${ClassName}List(${className});
     }
+
+    /**
+     * 分页查询${functionName}列表
+     *
+     * @param ${className} ${functionName}
+     * @return ${functionName}
+     */
+    @Override
+    public IPage<${ClassName}> selectList(IPage<${ClassName}> page, ${ClassName} ${className}) {
+        return ${className}Mapper.select${ClassName}Page(page, ${className});
+    }
+
 
     /**
      * 新增${functionName}

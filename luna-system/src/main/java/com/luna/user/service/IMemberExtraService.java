@@ -3,9 +3,7 @@ package com.luna.user.service;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.luna.user.domain.MemberExtra;
-import com.luna.user.mapper.MemberExtraMapper;
 
 /**
  * 会员信息Service接口
