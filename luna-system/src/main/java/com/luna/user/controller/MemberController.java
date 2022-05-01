@@ -92,6 +92,18 @@ public class MemberController extends BaseController
         return toAjax(memberDOService.updateMemberDO(memberDO));
     }
 
+
+    /**
+     * 修改会员状态
+     */
+    @PreAuthorize("@ss.hasPermi('user:member:edit')")
+    @Log(title = "会员管理", businessType = BusinessType.UPDATE)
+    @PutMapping("/{userId}")
+    public AjaxResult editDelFlag(@RequestBody MemberDO memberDO)
+    {
+        return toAjax(memberDOService.updateMemberDO(memberDO));
+    }
+
     /**
      * 删除会员管理
      */
