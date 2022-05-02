@@ -3,7 +3,10 @@ package com.luna.generator.domain;
 public enum VmTypeEnum {
 
     MYBATIS_BASE(1, "mybatis","mybatis/vm"),
-    MYBATIS_PLUS(2, "mybatis-plus", "mybatis-plus/vm");
+    MYBATIS_PLUS(2, "mybatis-plus", "mybatis-plus/vm"),
+    MYBATIS_PLUS_SWAGGER(3, "mybatis_plus_swagger", "mybatis_plus_swagger/vm")
+
+    ;
 
     private Integer type;
     private String desc;
