@@ -28,7 +28,7 @@ import ${packageName}.service.I${ClassName}Service;
  * @date ${datetime}
  */
 @Service
-public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${ClassName}> implements I${ClassName}Service
+public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${ClassName}>
 {
     @Autowired
     private ${ClassName}Mapper ${className}Mapper;

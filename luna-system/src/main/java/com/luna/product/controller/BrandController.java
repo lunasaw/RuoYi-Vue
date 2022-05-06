@@ -37,14 +37,13 @@ public class BrandController extends BaseController
     private IBrandService brandService;
 
     /**
-     * 查询品牌列表
+     * 分页查询品牌列表
      */
     @PreAuthorize("@ss.hasPermi('product:brand:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Brand brand)
-    {
-        startPage();
-        List<Brand> list = brandService.selectBrandList(brand);
+    public TableDataInfo pageList(Brand brand) {
+        Page<Brand> page = startPageList();
+        IPage<Brand> list = brandService.selectList(page, brand);
         return getDataTable(list);
     }
 
@@ -52,11 +51,11 @@ public class BrandController extends BaseController
      * 分页查询品牌列表
      */
     @PreAuthorize("@ss.hasPermi('product:brand:list')")
-    @GetMapping("/pageList")
-    public TableDataInfo pageList(Brand brand) {
+    @GetMapping("/listAll")
+    public TableDataInfo listAll(Brand brand) {
         Page<Brand> page = startPageList();
         IPage<Brand> list = brandService.selectList(page, brand);
-        return getDataTable(list.getRecords());
+        return getDataTable(list);
     }
 
     /**

@@ -40,35 +40,22 @@ public class ${ClassName}Controller extends BaseController
     private I${ClassName}Service ${className}Service;
 
     /**
-     * 查询${functionName}列表
-     */
-    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
-    @GetMapping("/list")
-#if($table.crud || $table.sub)
-    public TableDataInfo list(${ClassName} ${className})
-    {
-        startPage();
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        return getDataTable(list);
-    }
-#elseif($table.tree)
-    public AjaxResult list(${ClassName} ${className})
-    {
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        return AjaxResult.success(list);
-    }
-#end
-
-    /**
      * 分页查询${functionName}列表
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
-    @GetMapping("/pageList")
-    public TableDataInfo pageList(${ClassName} ${className}) {
-        Page<${ClassName}> page = startPageList();
-        IPage<${ClassName}> list = ${className}Service.selectList(page, ${className});
-        return getDataTable(list.getRecords());
+    @ApiOperation(value = "查询${functionName}列表")
+    @GetMapping("/list")
+    #if($table.crud || $table.sub)
+    public TableDataInfo list(${ClassName} ${className}) {
+        IPage<${ClassName}> list = ${className}Service.selectList(startPage(), ${className});
+        return getDataTable(list);
     }
+    #elseif($table.tree)
+        public AjaxResult list(${ClassName} ${className}) {
+            List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+            return AjaxResult.success(list);
+        }
+    #end
 
     /**
      * 导出${functionName}列表

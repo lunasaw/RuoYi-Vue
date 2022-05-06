@@ -100,6 +100,24 @@ mybatis:
     # 加载全局的配置文件
     configLocation: classpath:mybatis/mybatis-config.xml
 
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.luna.**.domain
+  global-config:
+    # 数据库相关配置
+    db-config:
+      #主键类型
+      id-type: auto
+      #字段策略
+      field-strategy: not_empty
+      # mysql
+      #      db-type: mysql
+      # 神通
+      #      db-type: oscar
+      # 达梦
+      db-type: mysql
+  #      page-type: mysql
+
 # PageHelper分页插件
 pagehelper: 
   helperDialect: mysql

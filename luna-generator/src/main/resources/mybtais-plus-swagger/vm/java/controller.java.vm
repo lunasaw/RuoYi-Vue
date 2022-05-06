@@ -3,6 +3,8 @@ package ${packageName}.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ import com.luna.common.core.page.TableDataInfo;
 
 /**
  * ${functionName}Controller
- * 
+ *
  * @author ${author}
  * @date ${datetime}
  */
@@ -41,37 +43,40 @@ public class ${ClassName}Controller extends BaseController
     private I${ClassName}Service ${className}Service;
 
     /**
-     * 查询${functionName}列表
-     */
-    @ApiOperation(value = "查询${functionName}列表")
-    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
-    @GetMapping("/list")
-#if($table.crud || $table.sub)
-    public TableDataInfo list(${ClassName} ${className})
-    {
-        startPage();
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        return getDataTable(list);
-    }
-#elseif($table.tree)
-    public AjaxResult list(${ClassName} ${className})
-    {
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        return AjaxResult.success(list);
-    }
-#end
-
-    /**
      * 分页查询${functionName}列表
      */
-    @ApiOperation(value = "分页查询${functionName}列表")
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
-    @GetMapping("/pageList")
-    public TableDataInfo pageList(${ClassName} ${className}) {
-        Page<${ClassName}> page = startPageList();
-        IPage<${ClassName}> list = ${className}Service.selectList(page, ${className});
-        return getDataTable(list.getRecords());
+    @ApiOperation(value = "查询${functionName}列表")
+    @GetMapping("/list")
+    #if($table.crud || $table.sub)
+    public TableDataInfo list(${ClassName} ${className}) {
+        IPage<${ClassName}> list = ${className}Service.selectList(startPage(), ${className});
+        return getDataTable(list);
     }
+    #elseif($table.tree)
+        public AjaxResult list(${ClassName} ${className}) {
+            List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+            return AjaxResult.success(list);
+        }
+    #end
+
+    /**
+     * 分查询${functionName}列表
+     */
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
+    @ApiOperation(value = "查询${functionName}列表")
+    @GetMapping("/listAll")
+    #if($table.crud || $table.sub)
+    public TableDataInfo list(${ClassName} ${className}) {
+        IPage<${ClassName}> list = ${className}Service.selectListAll(startPage(), ${className});
+        return getDataTable(list);
+    }
+    #elseif($table.tree)
+        public AjaxResult list(${ClassName} ${className}) {
+            List<${ClassName}> list = ${className}Service.select${ClassName}ListAll(${className});
+            return AjaxResult.success(list);
+        }
+    #end
 
     /**
      * 导出${functionName}列表

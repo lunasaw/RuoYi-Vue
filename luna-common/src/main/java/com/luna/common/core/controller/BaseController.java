@@ -5,6 +5,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.Date;
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luna.common.constant.SqlConstants;
@@ -126,6 +127,21 @@ public class BaseController
         rspData.setMsg("查询成功");
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
+    }
+
+
+    /**
+     * 响应请求分页数据
+     *
+     * @param page
+     */
+    protected TableDataInfo getDataTable(IPage<?> page) {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setMsg("查询成功");
+        rspData.setRows(page.getRecords());
+        rspData.setTotal(page.getTotal());
         return rspData;
     }
 
