@@ -61,22 +61,25 @@ public class ${ClassName}Controller extends BaseController
     #end
 
     /**
-     * 分查询${functionName}列表
+     * 查询全部${functionName}列表
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
     @ApiOperation(value = "查询${functionName}列表")
     @GetMapping("/listAll")
-    #if($table.crud || $table.sub)
-    public TableDataInfo list(${ClassName} ${className}) {
-        IPage<${ClassName}> list = ${className}Service.selectListAll(startPage(), ${className});
-        return getDataTable(list);
+    public List<${ClassName}> list(${ClassName} ${className}) {
+        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+        return list;
     }
-    #elseif($table.tree)
-        public AjaxResult list(${ClassName} ${className}) {
-            List<${ClassName}> list = ${className}Service.select${ClassName}ListAll(${className});
-            return AjaxResult.success(list);
-        }
-    #end
+
+    /**
+     * ids批量查询品牌列表
+     */
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
+    @ApiOperation(value = "查询${functionName}列表")
+    @GetMapping("/listAll")
+    public List<${ClassName}> listAll(List<Long> ids) {
+        return ${className}Service.select${ClassName}ByIds(ids);
+    }
 
     /**
      * 导出${functionName}列表

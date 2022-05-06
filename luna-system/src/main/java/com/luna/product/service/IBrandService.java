@@ -30,6 +30,14 @@ public interface IBrandService  extends IService<Brand>
     public List<Brand> selectBrandList(Brand brand);
 
     /**
+     * 查询品牌列表
+     *
+     * @param ids 品牌
+     * @return 品牌集合
+     */
+    public List<Brand> selectBrandByIds(List<Long> ids);
+
+    /**
      * 分页查询品牌列表
      *
      * @param brand 品牌

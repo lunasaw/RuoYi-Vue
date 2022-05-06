@@ -52,11 +52,19 @@ public class BrandController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('product:brand:list')")
     @GetMapping("/listAll")
-    public TableDataInfo listAll(Brand brand) {
-        Page<Brand> page = startPageList();
-        IPage<Brand> list = brandService.selectList(page, brand);
-        return getDataTable(list);
+    public List<Brand> listAll(Brand brand) {
+        return brandService.selectBrandList(brand);
     }
+
+    /**
+     * ids批量查询品牌列表
+     */
+    @PreAuthorize("@ss.hasPermi('product:brand:list')")
+    @GetMapping("/listIds")
+    public List<Brand> listAll(List<Long> ids) {
+        return brandService.selectBrandByIds(ids);
+    }
+
 
     /**
      * 导出品牌列表

@@ -39,7 +39,6 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
      * @param ${pkColumn.javaField} ${functionName}主键
      * @return ${functionName}
      */
-    @Override
     public ${ClassName} select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaType} ${pkColumn.javaField})
     {
         return ${className}Mapper.select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaField});
@@ -51,7 +50,6 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
      * @param ${className} ${functionName}
      * @return ${functionName}
      */
-    @Override
     public List<${ClassName}> select${ClassName}List(${ClassName} ${className})
     {
         return ${className}Mapper.select${ClassName}List(${className});
@@ -63,7 +61,6 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
      * @param ${className} ${functionName}
      * @return ${functionName}
      */
-    @Override
     public IPage<${ClassName}> selectList(IPage<${ClassName}> page, ${ClassName} ${className}) {
         return ${className}Mapper.select${ClassName}Page(page, ${className});
     }
@@ -78,7 +75,6 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
 #if($table.sub)
     @Transactional
 #end
-    @Override
     public int insert${ClassName}(${ClassName} ${className})
     {
 #foreach ($column in $columns)
@@ -104,7 +100,6 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
 #if($table.sub)
     @Transactional
 #end
-    @Override
     public int update${ClassName}(${ClassName} ${className})
     {
 #foreach ($column in $columns)
@@ -128,7 +123,6 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
 #if($table.sub)
     @Transactional
 #end
-    @Override
     public int delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaType}[] ${pkColumn.javaField}s)
     {
 #if($table.sub)
@@ -146,7 +140,6 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
 #if($table.sub)
     @Transactional
 #end
-    @Override
     public int delete${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaType} ${pkColumn.javaField})
     {
 #if($table.sub)

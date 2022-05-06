@@ -1,7 +1,9 @@
 package com.luna.product.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,6 +34,21 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
     public Brand selectBrandById(Long id)
     {
         return brandMapper.selectBrandById(id);
+    }
+
+
+    /**
+     * ids查询品牌列表
+     *
+     * @param ids 品牌
+     * @return 品牌
+     */
+    @Override
+    public List<Brand> selectBrandByIds(List<Long> ids){
+        if (CollectionUtils.isEmpty(ids)){
+            return new ArrayList<>();
+        }
+        return brandMapper.selectBatchIds(ids);
     }
 
     /**
