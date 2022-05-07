@@ -43,18 +43,38 @@ public class ${ClassName}Controller extends BaseController {
     private I${ClassName}Service ${className}Service;
 
     /**
+     * 查询${functionName}列表
+     */
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
+    @GetMapping("/list")
+    #if($table.crud || $table.sub)
+    public TableDataInfo list(${ClassName} ${className})
+    {
+        startPage();
+        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+        return getDataTable(list);
+    }
+    #elseif($table.tree)
+        public AjaxResult list(${ClassName} ${className})
+        {
+            List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+            return AjaxResult.success(list);
+        }
+    #end
+
+    /**
      * 分页查询${functionName}列表
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')" )
     @ApiOperation(value = "查询${functionName}列表" )
-    @GetMapping("/list" )
+    @GetMapping("/listPage" )
     #if($table.crud || $table.sub)
-    public TableDataInfo list(${ClassName} ${className}) {
+    public TableDataInfo listPage(${ClassName} ${className}) {
         IPage<${ClassName}> list = ${className}Service.selectList(startPage(), ${className});
         return getDataTable(list);
     }
     #elseif($table.tree)
-        public AjaxResult list(${ClassName} ${className}) {
+        public AjaxResult listPage(${ClassName} ${className}) {
             List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
             return AjaxResult.success(list);
         }
@@ -64,9 +84,9 @@ public class ${ClassName}Controller extends BaseController {
      * 查询全部${functionName}列表
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')" )
-    @ApiOperation(value = "查询${functionName}列表" )
+    @ApiOperation(value = "查询全部${functionName}列表" )
     @GetMapping("/listAll" )
-    public List<${ClassName}> list(${ClassName} ${className}) {
+    public List<${ClassName}> listAll(${ClassName} ${className}) {
         List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
         return list;
     }
@@ -75,7 +95,7 @@ public class ${ClassName}Controller extends BaseController {
      * ids批量查询品牌列表
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')" )
-    @ApiOperation(value = "查询${functionName}列表" )
+    @ApiOperation(value = "ids查询${functionName}列表" )
     @GetMapping("/listByIds" )
     public List<${ClassName}> listByIds(List<Long> ids) {
         return ${className}Service.select${ClassName}ByIds(ids);

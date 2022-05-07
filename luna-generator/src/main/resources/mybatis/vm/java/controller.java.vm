@@ -37,6 +37,7 @@ public class ${ClassName}Controller extends BaseController
     @Autowired
     private I${ClassName}Service ${className}Service;
 
+
     /**
      * 查询${functionName}列表
      */

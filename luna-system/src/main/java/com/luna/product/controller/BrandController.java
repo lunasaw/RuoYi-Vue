@@ -42,6 +42,17 @@ public class BrandController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('product:brand:list')")
     @GetMapping("/list")
+    public TableDataInfo list(Brand brand) {
+        startPage();
+        List<Brand> brands = brandService.selectList(brand);
+        return getDataTable(brands);
+    }
+
+    /**
+     * 分页查询品牌列表
+     */
+    @PreAuthorize("@ss.hasPermi('product:brand:list')")
+    @GetMapping("/listPage")
     public TableDataInfo pageList(Brand brand) {
         Page<Brand> page = startPageList();
         IPage<Brand> list = brandService.selectList(page, brand);
@@ -49,7 +60,7 @@ public class BrandController extends BaseController {
     }
 
     /**
-     * 分页查询品牌列表
+     * 分页查询全部品牌列表
      */
     @PreAuthorize("@ss.hasPermi('product:brand:list')")
     @GetMapping("/listAll")

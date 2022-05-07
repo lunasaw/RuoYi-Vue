@@ -11,8 +11,7 @@ import com.luna.product.domain.Brand;
  * @author luna
  * @date 2022-05-01
  */
-public interface IBrandService  extends IService<Brand>
-{
+public interface IBrandService extends IService<Brand> {
     /**
      * 查询品牌
      * 
@@ -32,6 +31,14 @@ public interface IBrandService  extends IService<Brand>
     /**
      * 查询品牌列表
      *
+     * @param brand 品牌
+     * @return 品牌集合
+     */
+    public List<Brand> selectList(Brand brand);
+
+    /**
+     * 查询品牌列表
+     *
      * @param ids 品牌
      * @return 品牌集合
      */
@@ -45,7 +52,6 @@ public interface IBrandService  extends IService<Brand>
      * @return 品牌集合
      */
     public IPage<Brand> selectList(IPage<Brand> page, Brand brand);
-
 
     /**
      * 新增品牌

@@ -74,6 +74,17 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
     }
 
     /**
+     * 查询全部品牌列表
+     *
+     * @param brand 品牌
+     * @return 品牌
+     */
+    @Override
+    public List<Brand> selectList(Brand brand) {
+        return brandMapper.selectBrandList(brand);
+    }
+
+    /**
      * 分页查询品牌列表
      *
      * @param brand 品牌

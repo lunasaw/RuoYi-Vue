@@ -47,6 +47,18 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
     }
 
     /**
+     * 查询${functionName}列表
+     *
+     * @param ${className} ${functionName}
+     * @return ${functionName}
+     */
+    public List<${ClassName}> select${ClassName}List(${ClassName} ${className})
+    {
+        return ${className}Mapper.select${ClassName}List(${className});
+    }
+
+
+    /**
      * 查询全部${functionName}列表
      *
      * @param ${className} ${functionName}
