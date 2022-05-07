@@ -9,6 +9,10 @@ import com.luna.common.utils.DateUtils;
 #end
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import org.apache.commons.compress.utils.Lists;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.stereotype.Service;
 #if($table.sub)
 import java.util.ArrayList;
 import com.luna.common.utils.StringUtils;
@@ -44,7 +48,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
     }
 
     /**
-     * 查询${functionName}列表
+     * 查询全部${functionName}列表
      * 
      * @param ${className} ${functionName}
      * @return ${functionName}
@@ -52,7 +56,50 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
     @Override
     public List<${ClassName}> select${ClassName}List(${ClassName} ${className})
     {
-        return ${className}Mapper.select${ClassName}List(${className});
+        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<${ClassName}>(brand);
+        queryWrapper.last("limit 100");
+        ArrayList<${ClassName}> list = Lists.newArrayList();
+        while (true) {
+            List<${ClassName}> ${className}s = ${className}Mapper.selectList(queryWrapper);
+            if (CollectionUtils.isEmpty(${className}s)) {
+                break;
+            }
+            list.addAll(${className}s);
+        }
+
+        return list;
+    }
+
+    /**
+     * ids查询品牌列表
+     *
+     * @param ids ${functionName}
+     * @return ${functionName}
+     */
+    @Override
+    public List<${ClassName}> select${ClassName}ByIds(List<Long> ids){
+        if (CollectionUtils.isEmpty(ids)){
+            return new ArrayList<>();
+        }
+        return ${className}Mapper.selectBatchIds(ids);
+    }
+
+    /**
+     * 分页查询${functionName}列表
+     *
+     * @param ${className} ${functionName}
+     * @param page 分页参数
+     * @return ${functionName}
+     */
+    @Override
+    public IPage<${ClassName}> selectList(IPage<${ClassName}> page, ${ClassName} ${className}) {
+        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<${ClassName}>(brand);
+        for (OrderItem order : page.orders()) {
+            queryWrapper.orderBy(true, order.isAsc(), order.getColumn());
+        }
+        Page<${ClassName}> selectPage = Page.of(page.getCurrent(), page.getSize());
+        selectPage.setMaxLimit(page.maxLimit());
+        return ${className}Mapper.selectPage(selectPage, queryWrapper);
     }
 
     /**

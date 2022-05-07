@@ -92,6 +92,19 @@ public class ${ClassName}Controller extends BaseController
     }
 
     /**
+     * 批量新增
+     */
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:add')" )
+    @ApiOperation(value = "批量新增${functionName}列表" )
+    @Log(title = "${functionName}" , businessType = BusinessType.INSERT)
+    @PostMapping("/addList" )
+    public List<Long> addList(List<${ClassName}> ${className}List) {
+            ${className}List = ${className}List.stream().filter(e-> Objects.nonNull(e.getId())).collect(Collectors.toList());
+        return ${className}Service.saveBatch(ids);
+    }
+
+
+    /**
      * 修改${functionName}
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
@@ -100,6 +113,18 @@ public class ${ClassName}Controller extends BaseController
     public AjaxResult edit(@RequestBody ${ClassName} ${className})
     {
         return toAjax(${className}Service.update${ClassName}(${className}));
+    }
+
+    /**
+     * 批量修改${functionName}
+     */
+    @ApiOperation(value = "修改${functionName}" )
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')" )
+    @Log(title = "${functionName}" , businessType = BusinessType.UPDATE)
+    @PutMapping("/editList")
+    public AjaxResult editList(@RequestBody List<${ClassName}> ${className}List) {
+            ${className}List = ${className}List.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        return toAjax(${className}Service.updateBatchById(${className}));
     }
 
     /**

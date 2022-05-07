@@ -20,12 +20,29 @@ public interface I${ClassName}Service
     public ${ClassName} select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaType} ${pkColumn.javaField});
 
     /**
-     * 查询${functionName}列表
+     * 查询全部${functionName}列表
      * 
      * @param ${className} ${functionName}
      * @return ${functionName}集合
      */
     public List<${ClassName}> select${ClassName}List(${ClassName} ${className});
+
+    /**
+     * ids查询品牌列表
+     *
+     * @param ids ${functionName}
+     * @return ${functionName}
+     */
+    public List<${ClassName}> select${ClassName}ByIds(List<Long> ids);
+
+    /**
+     * 分页查询${functionName}列表
+     *
+     * @param ${className} ${functionName}
+     * @param page 分页参数
+     * @return ${functionName}
+     */
+    public IPage<${ClassName}> selectList(IPage<${ClassName}> page, ${ClassName} ${className});
 
     /**
      * 新增${functionName}
