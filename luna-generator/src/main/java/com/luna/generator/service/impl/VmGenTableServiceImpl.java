@@ -13,6 +13,7 @@ import java.util.zip.ZipOutputStream;
 import com.luna.generator.service.IVmGenTableService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -106,8 +107,43 @@ public class VmGenTableServiceImpl implements IVmGenTableService {
                 Template tpl = Velocity.getTemplate(template, Constants.UTF8);
                 tpl.merge(context, sw);
                 try {
-                    String path = getGenPath(table, template);
+                    String path = getGenPath(table, template, vmId);
                     FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetKit.UTF_8);
+                } catch (IOException e) {
+                    throw new ServiceException("渲染模板失败，表名：" + table.getTableName());
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成代码（自动部署）
+     *
+     * @param tableName 表名称
+     * @return 数据
+     */
+    public void generatorCodeAuto(String tableName, Integer vmId) {
+        // 查询表信息
+        GenTable table = genTableMapper.selectGenTableByName(tableName);
+        // 设置主子表信息
+        setSubTable(table);
+        // 设置主键列信息
+        setPkColumn(table);
+
+        VelocityInitializer.initVelocity();
+
+        VelocityContext context = VelocityUtils.prepareContext(table);
+        // 获取模板列表
+        List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory(), VmTypeEnum.getById(vmId));
+        for (String template : templates) {
+            if (!StringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm")) {
+                // 渲染模板
+                StringWriter sw = new StringWriter();
+                Template tpl = Velocity.getTemplate(template, Constants.UTF8);
+                tpl.merge(context, sw);
+                try {
+                    String path = getGenPath(table, template, vmId);
+                    FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetKit.UTF_8, true);
                 } catch (IOException e) {
                     throw new ServiceException("渲染模板失败，表名：" + table.getTableName());
                 }
@@ -205,6 +241,14 @@ public class VmGenTableServiceImpl implements IVmGenTableService {
         return outputStream.toByteArray();
     }
 
+    public static String getGenPath(GenTable table, String template, Integer vmId) {
+        String genPath = table.getGenPath();
+        if (StringUtils.equals(genPath, "/")) {
+            return System.getProperty("user.dir") + File.separator + "src" + File.separator + VelocityUtils.getFileName(template, table, vmId);
+        }
+        return genPath + File.separator + VelocityUtils.getFileName(template, table, vmId);
+    }
+
     /**
      * 获取代码生成地址
      * 
@@ -213,10 +257,6 @@ public class VmGenTableServiceImpl implements IVmGenTableService {
      * @return 生成地址
      */
     public static String getGenPath(GenTable table, String template) {
-        String genPath = table.getGenPath();
-        if (StringUtils.equals(genPath, "/")) {
-            return System.getProperty("user.dir") + File.separator + "src" + File.separator + VelocityUtils.getFileName(template, table);
-        }
-        return genPath + File.separator + VelocityUtils.getFileName(template, table);
+        return getGenPath(table, template, VmTypeEnum.MYBATIS_BASE.getType());
     }
 }

@@ -36,6 +36,15 @@ public interface IVmGenTableService
      */
     public void generatorCode(String tableName, Integer vmId);
 
+
+    /**
+     * 生成代码（自动部署）
+     *
+     * @param tableName 表名称
+     * @return 数据
+     */
+    public void generatorCodeAuto(String tableName, Integer vmId);
+
     /**
      * 生成代码（自定义路径）
      *

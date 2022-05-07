@@ -7,7 +7,6 @@ import com.luna.common.enums.BusinessType;
 import com.luna.generator.domain.VmTypeEnum;
 import com.luna.generator.domain.VmTypeVO;
 import com.luna.generator.service.IVmGenTableService;
-import com.luna.generator.util.GenUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +29,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/tool/gen")
-public class VmGenController {
+public class LunaGenController {
 
     @Autowired
     private IVmGenTableService iVmGenTableService;
@@ -86,6 +85,18 @@ public class VmGenController {
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/genCode/{tableName}/{vmId}")
     public AjaxResult genCode(@PathVariable("tableName") String tableName, @PathVariable("vmId") Integer vmId) {
+        iVmGenTableService.generatorCode(tableName, vmId);
+        return AjaxResult.success();
+    }
+
+
+    /**
+     * 生成代码（自动部署）
+     */
+    @PreAuthorize("@ss.hasPermi('tool:gen:code')")
+    @Log(title = "代码生成", businessType = BusinessType.GENCODE)
+    @GetMapping("/genCodeAuto/{tableName}/{vmId}")
+    public AjaxResult genCodeAuto(@PathVariable("tableName") String tableName, @PathVariable("vmId") Integer vmId) {
         iVmGenTableService.generatorCode(tableName, vmId);
         return AjaxResult.success();
     }

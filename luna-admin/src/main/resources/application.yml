@@ -90,15 +90,6 @@ token:
     secret: abcdefghijklmnopqrstuvwxyz
     # 令牌有效期（默认30分钟）
     expireTime: 1440
-  
-# MyBatis配置
-#mybatis:
-#    # 搜索指定包别名
-#    typeAliasesPackage: com.luna.**.domain
-#    # 配置mapper的扫描，找到所有的mapper.xml映射文件
-#    mapperLocations: classpath*:mapper/**/*Mapper.xml
-#    # 加载全局的配置文件
-#    configLocation: classpath:mybatis/mybatis-config.xml
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
@@ -117,12 +108,6 @@ mybatis-plus:
       # 达梦
       db-type: mysql
   #      page-type: mysql
-
-# PageHelper分页插件
-pagehelper: 
-  helperDialect: mysql
-  supportMethodsArguments: true
-  params: count=countSql 
 
 # Swagger配置
 swagger:

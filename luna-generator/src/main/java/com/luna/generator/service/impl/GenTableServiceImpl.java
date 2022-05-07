@@ -204,7 +204,7 @@ public class GenTableServiceImpl implements IGenTableService {
      * @param tableName 表名称
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {})
     public void synchDb(String tableName) {
         GenTable table = genTableMapper.selectGenTableByName(tableName);
         List<GenTableColumn> tableColumns = table.getColumns();

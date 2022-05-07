@@ -128,7 +128,7 @@ public class VelocityUtils {
         templates.add(header + "/java/domain.java.vm");
         templates.add(header + "/java/mapper.java.vm");
         templates.add(header + "/java/service.java.vm");
-        if (!VmTypeEnum.MYBATIS_PLUS_SWAGGER.equals(typeEnum)){
+        if (!VmTypeEnum.MYBATIS_PLUS_SWAGGER.equals(typeEnum)) {
             templates.add(header + "/java/serviceImpl.java.vm");
         }
         templates.add(header + "/java/controller.java.vm");
@@ -175,7 +175,7 @@ public class VelocityUtils {
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, GenTable genTable) {
+    public static String getFileName(String template, GenTable genTable, Integer vmId) {
         // 文件名称
         String fileName = "";
         // 包路径
@@ -191,6 +191,8 @@ public class VelocityUtils {
         String mybatisPath = MYBATIS_PATH + "/" + moduleName;
         String vuePath = "vue";
 
+        VmTypeEnum vmTypeEnum = VmTypeEnum.getById(vmId);
+
         if (template.contains("domain.java.vm")) {
             fileName = StringUtils.format("{}/domain/{}.java", javaPath, className);
         }
@@ -199,7 +201,11 @@ public class VelocityUtils {
         } else if (template.contains("mapper.java.vm")) {
             fileName = StringUtils.format("{}/mapper/{}Mapper.java", javaPath, className);
         } else if (template.contains("service.java.vm")) {
-            fileName = StringUtils.format("{}/service/I{}Service.java", javaPath, className);
+            if (VmTypeEnum.MYBATIS_PLUS_SWAGGER.equals(vmTypeEnum)) {
+                fileName = StringUtils.format("{}/service/{}Service.java", javaPath, className);
+            } else {
+                fileName = StringUtils.format("{}/service/I{}Service.java", javaPath, className);
+            }
         } else if (template.contains("serviceImpl.java.vm")) {
             fileName = StringUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
         } else if (template.contains("controller.java.vm")) {
@@ -216,6 +222,13 @@ public class VelocityUtils {
             fileName = StringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
         }
         return fileName;
+    }
+
+    /**
+     * 获取文件名
+     */
+    public static String getFileName(String template, GenTable genTable) {
+        return getFileName(template, genTable, VmTypeEnum.MYBATIS_BASE.getType());
     }
 
     /**

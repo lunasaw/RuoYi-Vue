@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.Objects;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,7 @@ import com.luna.common.core.controller.BaseController;
 import com.luna.common.core.domain.AjaxResult;
 import com.luna.common.enums.BusinessType;
 import ${packageName}.domain.${ClassName};
-import ${packageName}.service.I${ClassName}Service;
+import ${packageName}.service.${ClassName}Service;
 import com.luna.common.utils.poi.ExcelUtil;
 #if($table.crud || $table.sub)
 import com.luna.common.core.page.TableDataInfo;
@@ -40,7 +43,7 @@ import com.luna.common.core.page.TableDataInfo;
 @Api(tags = "${functionName}" )
 public class ${ClassName}Controller extends BaseController {
     @Autowired
-    private I${ClassName}Service ${className}Service;
+    private ${ClassName}Service ${className}Service;
 
     /**
      * 查询${functionName}列表
@@ -70,7 +73,8 @@ public class ${ClassName}Controller extends BaseController {
     @GetMapping("/listPage" )
     #if($table.crud || $table.sub)
     public TableDataInfo listPage(${ClassName} ${className}) {
-        IPage<${ClassName}> list = ${className}Service.selectList(startPage(), ${className});
+        Page<${ClassName}> page = startPageList();
+        IPage<${ClassName}> list = ${className}Service.selectList(page, ${className});
         return getDataTable(list);
     }
     #elseif($table.tree)
@@ -87,7 +91,7 @@ public class ${ClassName}Controller extends BaseController {
     @ApiOperation(value = "查询全部${functionName}列表" )
     @GetMapping("/listAll" )
     public List<${ClassName}> listAll(${ClassName} ${className}) {
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+        List<${ClassName}> list = ${className}Service.selectAllList(${className});
         return list;
     }
 
@@ -142,9 +146,9 @@ public class ${ClassName}Controller extends BaseController {
     @ApiOperation(value = "批量新增${functionName}列表" )
     @Log(title = "${functionName}" , businessType = BusinessType.INSERT)
     @PostMapping("/addList" )
-    public List<Long> addList(List<${ClassName}> ${className}List) {
+    public Boolean addList(List<${ClassName}> ${className}List) {
         ${className}List = ${className}List.stream().filter(e-> Objects.nonNull(e.getId())).collect(Collectors.toList());
-        return ${className}Service.saveBatch(ids);
+        return ${className}Service.saveBatch(${className}List);
     }
 
 
@@ -168,7 +172,7 @@ public class ${ClassName}Controller extends BaseController {
     @PutMapping("/editList")
     public AjaxResult editList(@RequestBody List<${ClassName}> ${className}List) {
         ${className}List = ${className}List.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        return toAjax(${className}Service.updateBatchById(${className}));
+        return toAjax(${className}Service.updateBatchById(${className}List));
     }
 
     /**
@@ -178,7 +182,18 @@ public class ${ClassName}Controller extends BaseController {
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:remove')" )
     @Log(title = "${functionName}" , businessType = BusinessType.DELETE)
     @DeleteMapping("/{${pkColumn.javaField}s}" )
-    public AjaxResult remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s) {
+    public AjaxResult removeByIds(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s) {
         return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaField}s));
+    }
+
+    /**
+     * 单个删除${functionName}
+     */
+    @ApiOperation(value = "删除${functionName}" )
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:remove')" )
+    @Log(title = "${functionName}" , businessType = BusinessType.DELETE)
+    @DeleteMapping("/{${pkColumn.javaField}}" )
+    public AjaxResult remove(@PathVariable ${pkColumn.javaType} ${pkColumn.javaField}) {
+        return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaField}));
     }
 }

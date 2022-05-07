@@ -9,8 +9,11 @@ import java.util.List;
     #end
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import org.apache.commons.compress.utils.Lists;
+import org.apache.commons.collections4.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -23,7 +26,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
     #end
 import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.domain.${ClassName};
-import ${packageName}.service.I${ClassName}Service;
 
 /**
  * ${functionName}Service业务层处理
@@ -64,9 +66,9 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
      * @param ${className} ${functionName}
      * @return ${functionName}
      */
-    public List<${ClassName}> select${ClassName}List(${ClassName} ${className}) {
+    public List<${ClassName}> selectAllList(${ClassName} ${className}) {
 
-        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<${ClassName}>(brand);
+        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<${ClassName}>(${className});
         queryWrapper.last("limit 100");
         ArrayList<${ClassName}> list = Lists.newArrayList();
         while (true) {
@@ -101,7 +103,7 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
      * @return ${functionName}
      */
     public IPage<${ClassName}> selectList(IPage<${ClassName}> page, ${ClassName} ${className}) {
-        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<${ClassName}>(brand);
+        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<${ClassName}>(${className});
         for (OrderItem order : page.orders()) {
             queryWrapper.orderBy(true, order.isAsc(), order.getColumn());
         }
