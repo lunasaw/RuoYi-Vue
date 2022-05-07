@@ -63,16 +63,8 @@ public interface ${ClassName}Mapper extends BaseMapper<${ClassName}> {
      */
     public int delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaType}[] ${pkColumn.javaField}s);
 
-    /**
-     * 分页查询${functionName}列表
-     *
-     * param page             分页信息
-     * @param ${className} ${functionName}信息
-     * @return ${functionName}集合
-     */
-    public IPage<${ClassName}> select${ClassName}Page(IPage<${ClassName}> page, ${ClassName} ${className});
 
-    #if($table.sub)
+#if($table.sub)
 
     /**
      * 批量删除${subTable.functionName}

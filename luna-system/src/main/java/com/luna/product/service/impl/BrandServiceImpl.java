@@ -68,7 +68,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
             if (CollectionUtils.isEmpty(brands)) {
                 break;
             }
-            list.add(brand);
+            list.addAll(brands);
         }
         return list;
     }
@@ -87,7 +87,6 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
         }
         Page<Brand> selectPage = Page.of(page.getCurrent(), page.getSize());
         selectPage.setMaxLimit(page.maxLimit());
-        queryWrapper.last("limit 100");
         return brandMapper.selectPage(selectPage, queryWrapper);
     }
 

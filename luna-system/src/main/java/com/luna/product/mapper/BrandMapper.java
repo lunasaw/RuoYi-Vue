@@ -61,13 +61,4 @@ public interface BrandMapper extends BaseMapper<Brand> {
      */
     public int deleteBrandByIds(Long[] ids);
 
-    /**
-     * 分页查询品牌列表
-     *
-     * @param page 分页信息
-     * @param brand 品牌信息
-     * @return 品牌集合
-     */
-    public IPage<Brand> selectBrandPage(@Param(value = "page") IPage<Brand> page, @Param(value = "brand") Brand brand);
-
 }

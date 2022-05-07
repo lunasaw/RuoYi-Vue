@@ -51,43 +51,6 @@
         where id = #{id} limit 1
     </select>
 
-    <select id="selectBrandPage" resultMap="BrandResult">
-        <include refid="selectBrandVo"/>
-        <where>
-            <if test="brand.name != null  and brand.name != ''">
-                and name like concat('%', #{brand.name}, '%')
-            </if>
-            <if test="brand.firstLetter != null  and brand.firstLetter != ''">
-                and first_letter = #{brand.firstLetter}
-            </if>
-            <if test="brand.sort != null ">
-                and sort = #{brand.sort}
-            </if>
-            <if test="brand.factoryStatus != null ">
-                and factory_status = #{page.factoryStatus}
-            </if>
-            <if test="brand.showStatus != null  and brand.showStatus != ''">
-                and show_status = #{brand.showStatus}
-            </if>
-            <if test="brand.productCount != null ">
-                and product_count = #{brand.productCount}
-            </if>
-            <!-- 数据范围过滤 -->
-            <if test="brand.productCommentCount != null ">
-                and product_comment_count = #{page.}
-            </if>
-            <if test="brand.productCommentCount != null ">
-                and product_comment_count = #{brand.productCommentCount}
-            </if>
-            <if test="brand.productCommentCount != null ">
-                and product_comment_count = #{brand.productCommentCount}
-            </if>
-            <if test="brand.productCommentCount != null ">
-                and product_comment_count = #{brand.productCommentCount}
-            </if>
-        </where>
-    </select>
-
     <insert id="insertBrand" parameterType="Brand" useGeneratedKeys="true" keyProperty="id">
         insert into tb_pms_brand
         <trim prefix="(" suffix=")" suffixOverrides=",">
