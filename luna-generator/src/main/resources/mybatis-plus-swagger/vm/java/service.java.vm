@@ -70,6 +70,7 @@ public class ${ClassName}Service extends ServiceImpl<${ClassName}Mapper, ${Class
      * 分页查询${functionName}列表
      *
      * @param ${className} ${functionName}
+     * @param page 分页参数
      * @return ${functionName}
      */
     public IPage<${ClassName}> selectList(IPage<${ClassName}> page, ${ClassName} ${className}) {

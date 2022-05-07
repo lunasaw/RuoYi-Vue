@@ -1,6 +1,8 @@
 package com.luna.product.controller;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -31,8 +33,7 @@ import com.luna.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/product/brand")
-public class BrandController extends BaseController
-{
+public class BrandController extends BaseController {
     @Autowired
     private IBrandService brandService;
 
@@ -60,11 +61,10 @@ public class BrandController extends BaseController
      * ids批量查询品牌列表
      */
     @PreAuthorize("@ss.hasPermi('product:brand:list')")
-    @GetMapping("/listIds")
-    public List<Brand> listAll(List<Long> ids) {
+    @GetMapping("/listByIds")
+    public List<Brand> listByIds(@RequestBody List<Long> ids) {
         return brandService.selectBrandByIds(ids);
     }
-
 
     /**
      * 导出品牌列表
@@ -72,8 +72,7 @@ public class BrandController extends BaseController
     @PreAuthorize("@ss.hasPermi('product:brand:export')")
     @Log(title = "品牌", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Brand brand)
-    {
+    public void export(HttpServletResponse response, Brand brand) {
         List<Brand> list = brandService.selectBrandList(brand);
         ExcelUtil<Brand> util = new ExcelUtil<Brand>(Brand.class);
         util.exportExcel(response, list, "品牌数据");
@@ -84,8 +83,7 @@ public class BrandController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('product:brand:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
-    {
+    public AjaxResult getById(@PathVariable("id") Long id) {
         return AjaxResult.success(brandService.selectBrandById(id));
     }
 
@@ -95,9 +93,19 @@ public class BrandController extends BaseController
     @PreAuthorize("@ss.hasPermi('product:brand:add')")
     @Log(title = "品牌", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Brand brand)
-    {
+    public AjaxResult add(@RequestBody Brand brand) {
         return toAjax(brandService.insertBrand(brand));
+    }
+
+    /**
+     * 批量新增品牌
+     */
+    @PreAuthorize("@ss.hasPermi('product:brand:add')")
+    @Log(title = "品牌", businessType = BusinessType.INSERT)
+    @PostMapping("/saveBatch")
+    public AjaxResult saveBatch(@RequestBody List<Brand> brandList) {
+        brandList = brandList.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        return toAjax(brandService.saveBatch(brandList));
     }
 
     /**
@@ -106,9 +114,19 @@ public class BrandController extends BaseController
     @PreAuthorize("@ss.hasPermi('product:brand:edit')")
     @Log(title = "品牌", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Brand brand)
-    {
+    public AjaxResult edit(@RequestBody Brand brand) {
         return toAjax(brandService.updateBrand(brand));
+    }
+
+    /**
+     * 批量修改品牌
+     */
+    @PreAuthorize("@ss.hasPermi('product:brand:edit')")
+    @Log(title = "品牌", businessType = BusinessType.UPDATE)
+    @PutMapping("/editList")
+    public AjaxResult editList(@RequestBody List<Brand> brandList) {
+        brandList = brandList.stream().filter(e -> Objects.nonNull(e.getId())).collect(Collectors.toList());
+        return toAjax(brandService.updateBatchById(brandList));
     }
 
     /**
@@ -116,9 +134,8 @@ public class BrandController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('product:brand:remove')")
     @Log(title = "品牌", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
-    {
+    @DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(brandService.deleteBrandByIds(ids));
     }
 }

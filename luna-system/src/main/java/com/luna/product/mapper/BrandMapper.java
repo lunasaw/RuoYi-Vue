@@ -4,6 +4,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.luna.product.domain.Brand;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 品牌Mapper接口
@@ -63,10 +64,10 @@ public interface BrandMapper extends BaseMapper<Brand> {
     /**
      * 分页查询品牌列表
      *
-     * param page             分页信息
+     * @param page 分页信息
      * @param brand 品牌信息
      * @return 品牌集合
      */
-    public IPage<Brand> selectBrandPage(IPage<Brand> page, Brand brand);
+    public IPage<Brand> selectBrandPage(@Param(value = "page") IPage<Brand> page, @Param(value = "brand") Brand brand);
 
 }

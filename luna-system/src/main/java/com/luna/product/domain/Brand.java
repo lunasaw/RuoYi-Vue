@@ -2,7 +2,10 @@ package com.luna.product.domain;
 
 import com.luna.common.annotation.Excel;
 import com.luna.common.core.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 品牌对象 tb_pms_brand
@@ -11,6 +14,9 @@ import lombok.Data;
  * @date 2022-05-02
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Brand extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

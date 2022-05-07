@@ -41,6 +41,7 @@ public interface IBrandService  extends IService<Brand>
      * 分页查询品牌列表
      *
      * @param brand 品牌
+     * @param page 分页参数
      * @return 品牌集合
      */
     public IPage<Brand> selectList(IPage<Brand> page, Brand brand);

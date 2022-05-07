@@ -114,7 +114,7 @@ public class VelocityUtils {
     }
 
     public static List<String> getTemplateList(String tplCategory, VmTypeEnum type) {
-        return getTemplateListPlus(tplCategory, type.getPath());
+        return getTemplateListPlus(tplCategory, type);
     }
 
     /**
@@ -122,12 +122,15 @@ public class VelocityUtils {
      *
      * @return 模板列表
      */
-    public static List<String> getTemplateListPlus(String tplCategory, String header) {
+    public static List<String> getTemplateListPlus(String tplCategory, VmTypeEnum typeEnum) {
         List<String> templates = new ArrayList<String>();
+        String header = typeEnum.getPath();
         templates.add(header + "/java/domain.java.vm");
         templates.add(header + "/java/mapper.java.vm");
         templates.add(header + "/java/service.java.vm");
-        templates.add(header + "/java/serviceImpl.java.vm");
+        if (!VmTypeEnum.MYBATIS_PLUS_SWAGGER.equals(typeEnum)){
+            templates.add(header + "/java/serviceImpl.java.vm");
+        }
         templates.add(header + "/java/controller.java.vm");
         templates.add(header + "/xml/mapper.xml.vm");
         templates.add(header + "/sql/sql.vm");

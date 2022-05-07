@@ -48,36 +48,43 @@
 
     <select id="selectBrandById" parameterType="Long" resultMap="BrandResult">
         <include refid="selectBrandVo"/>
-        where id = #{id}
+        where id = #{id} limit 1
     </select>
 
-    <select id="selectBrandPage" parameterType="com.luna.product.domain.Brand"
-            resultMap="BrandResult">
+    <select id="selectBrandPage" resultMap="BrandResult">
         <include refid="selectBrandVo"/>
         <where>
-            <if test="name != null  and name != ''">
-                and name like concat('%', #{name}, '%')
+            <if test="brand.name != null  and brand.name != ''">
+                and name like concat('%', #{brand.name}, '%')
             </if>
-            <if test="firstLetter != null  and firstLetter != ''">
-                and first_letter = #{firstLetter}
+            <if test="brand.firstLetter != null  and brand.firstLetter != ''">
+                and first_letter = #{brand.firstLetter}
             </if>
-            <if test="sort != null ">
-                and sort = #{sort}
+            <if test="brand.sort != null ">
+                and sort = #{brand.sort}
             </if>
-            <if test="factoryStatus != null ">
-                and factory_status = #{factoryStatus}
+            <if test="brand.factoryStatus != null ">
+                and factory_status = #{page.factoryStatus}
             </if>
-            <if test="showStatus != null  and showStatus != ''">
-                and show_status = #{showStatus}
+            <if test="brand.showStatus != null  and brand.showStatus != ''">
+                and show_status = #{brand.showStatus}
             </if>
-            <if test="productCount != null ">
-                and product_count = #{productCount}
-            </if>
-            <if test="productCommentCount != null ">
-                and product_comment_count = #{productCommentCount}
+            <if test="brand.productCount != null ">
+                and product_count = #{brand.productCount}
             </if>
             <!-- 数据范围过滤 -->
-            ${entity.params.dataScope}
+            <if test="brand.productCommentCount != null ">
+                and product_comment_count = #{page.}
+            </if>
+            <if test="brand.productCommentCount != null ">
+                and product_comment_count = #{brand.productCommentCount}
+            </if>
+            <if test="brand.productCommentCount != null ">
+                and product_comment_count = #{brand.productCommentCount}
+            </if>
+            <if test="brand.productCommentCount != null ">
+                and product_comment_count = #{brand.productCommentCount}
+            </if>
         </where>
     </select>
 

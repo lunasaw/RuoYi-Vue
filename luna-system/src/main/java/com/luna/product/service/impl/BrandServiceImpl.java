@@ -3,7 +3,11 @@ package com.luna.product.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,8 +23,7 @@ import com.luna.product.service.IBrandService;
  * @date 2022-05-01
  */
 @Service
-public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements IBrandService
-{
+public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements IBrandService {
     @Autowired
     private BrandMapper brandMapper;
 
@@ -31,11 +34,9 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      * @return 品牌
      */
     @Override
-    public Brand selectBrandById(Long id)
-    {
+    public Brand selectBrandById(Long id) {
         return brandMapper.selectBrandById(id);
     }
-
 
     /**
      * ids查询品牌列表
@@ -44,23 +45,32 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      * @return 品牌
      */
     @Override
-    public List<Brand> selectBrandByIds(List<Long> ids){
-        if (CollectionUtils.isEmpty(ids)){
+    public List<Brand> selectBrandByIds(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
             return new ArrayList<>();
         }
         return brandMapper.selectBatchIds(ids);
     }
 
     /**
-     * 查询品牌列表
+     * 查询全部品牌列表
      * 
      * @param brand 品牌
      * @return 品牌
      */
     @Override
-    public List<Brand> selectBrandList(Brand brand)
-    {
-        return brandMapper.selectBrandList(brand);
+    public List<Brand> selectBrandList(Brand brand) {
+        QueryWrapper<Brand> queryWrapper = new QueryWrapper<Brand>(brand);
+        queryWrapper.last("limit 100");
+        ArrayList<Brand> list = Lists.newArrayList();
+        while (true) {
+            List<Brand> brands = brandMapper.selectList(queryWrapper);
+            if (CollectionUtils.isEmpty(brands)) {
+                break;
+            }
+            list.add(brand);
+        }
+        return list;
     }
 
     /**
@@ -71,9 +81,15 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      */
     @Override
     public IPage<Brand> selectList(IPage<Brand> page, Brand brand) {
-        return brandMapper.selectBrandPage(page, brand);
+        QueryWrapper<Brand> queryWrapper = new QueryWrapper<Brand>(brand);
+        for (OrderItem order : page.orders()) {
+            queryWrapper.orderBy(true, order.isAsc(), order.getColumn());
+        }
+        Page<Brand> selectPage = Page.of(page.getCurrent(), page.getSize());
+        selectPage.setMaxLimit(page.maxLimit());
+        queryWrapper.last("limit 100");
+        return brandMapper.selectPage(selectPage, queryWrapper);
     }
-
 
     /**
      * 新增品牌
@@ -82,8 +98,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      * @return 结果
      */
     @Override
-    public int insertBrand(Brand brand)
-    {
+    public int insertBrand(Brand brand) {
         return brandMapper.insertBrand(brand);
     }
 
@@ -94,8 +109,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      * @return 结果
      */
     @Override
-    public int updateBrand(Brand brand)
-    {
+    public int updateBrand(Brand brand) {
         return brandMapper.updateBrand(brand);
     }
 
@@ -106,8 +120,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      * @return 结果
      */
     @Override
-    public int deleteBrandByIds(Long[] ids)
-    {
+    public int deleteBrandByIds(Long[] ids) {
         return brandMapper.deleteBrandByIds(ids);
     }
 
@@ -118,8 +131,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      * @return 结果
      */
     @Override
-    public int deleteBrandById(Long id)
-    {
+    public int deleteBrandById(Long id) {
         return brandMapper.deleteBrandById(id);
     }
 }
